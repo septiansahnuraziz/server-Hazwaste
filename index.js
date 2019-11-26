@@ -11,6 +11,7 @@ app.use(
     extended: true,
   })
 )
+app.use(cors());
 
 app.get('/', cors(), function (req, res) {
   res.send('Hello World!');

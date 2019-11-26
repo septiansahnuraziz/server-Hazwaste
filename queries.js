@@ -86,7 +86,11 @@ const createKendaraan = (request, response) => {
             if (error) {
                 throw error
             }
-            response.status(201).send('Vehicle added with ID:${result.plat}')
+            response.status(201).json({
+                status: 'success',
+                message: 'Berhasil menambahkan Kendaraan',
+                data: request.body
+            })
         }
     )
 }
@@ -100,7 +104,11 @@ const createPengemudi = (request, response) => {
             if (error) {
                 throw error
             }
-            response.status(201).send('Driver added with ID:${result.insertId}')
+            response.status(201).json({
+                status: 'success',
+                message: 'Berhasil menambahkan Pengemudi',
+                data: request.body
+            })
         }
     )
 }
@@ -114,7 +122,11 @@ const createPenghasil = (request, response) => {
             if (error) {
                 throw error
             }
-            response.status(201).send('Client added with ID:${result.insertedId}')
+            response.status(201).json({
+                status: 'success',
+                message: 'Berhasil menambahkan Penghasil',
+                data: request.body
+            })
         }
     )
 }
@@ -128,7 +140,11 @@ const createIjin = (request, response) => {
             if (error) {
                 throw error
             }
-            response.status(201).send('License added with ID:${result.insertedId}')
+            response.status(201).json({
+                status: 'success',
+                message: 'Berhasil menambahkan Ijin',
+                data: request.body
+            })
         }
     )
 }
@@ -142,7 +158,11 @@ const createTransport = (request, response) => {
             if (error) {
                 throw error
             }
-            response.status(201).send('License added with ID:${result.insertedId}')
+            response.status(201).json({
+                status: 'success',
+                message: 'Berhasil menambahkan transport',
+                data: request.body
+            })
         }
     )
 }
@@ -156,7 +176,11 @@ const createManifest= (request, response) => {
             if (error) {
                 throw error
             }
-            response.status(201).send('Manifest added with ID:${result.insertedId}')
+            response.status(201).json({
+                status: 'success',
+                message: 'Berhasil menambahkan Manifest',
+                data: request.body
+            })
         }
     )
 }
@@ -170,7 +194,11 @@ const createTracking= (request, response) => {
             if (error) {
                 throw error
             }
-            response.status(201).send('Position added with ID:${result.insertedId}')
+            response.status(201).json({
+                status: 'success',
+                message: 'Berhasil membuat History perjalanan',
+                data: request.body
+            })
         }
     )
 }
