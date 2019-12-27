@@ -22,7 +22,7 @@ app.get('/', cors(), function (req, res) {
 });
 app.listen(80, function () {
   console.log('CORS-enabled web server listening on port 80')
-})
+});
 
 app.get('/kendaraan', cors(), db.allKendaraan);
 
@@ -30,15 +30,20 @@ app.get('/availableVehicle', db.getAvailableVehicle);
 app.get('/pengemudi', db.allPengemudi);
 app.get('/availableDriver', db.getAvailableDriver);
 app.get('/penghasil', db.allPenghasil);
+app.get('/penghasil/:id', db.getPenghasilById);
 app.get('/kemasan', db.allKemasan);
+app.get('/kemasan/:id', db.getKemasanById);
 app.get('/jenis', db.allJenisLimbah);
+app.get('/jenis/:kode_limbah', db.getLimbahByKode)
 app.get('/unit', db.allUnit);
+app.get('/unit/:id', db.getUnitById);
 app.get('/activeTransport/:plat', db.getActiveTransport);
 app.get('/activeVehicle/:penghasil', db.getActiveVehiclebyPenghasil);
 app.get('/activeVehicle', db.getActiveVehicle);
 app.get('/manifest/:id_penghasil&:plat', db.getManifestbyPenghasil);
 app.get('/manifest/:plat', db.getManifestbyTruck);
 app.get('/kendaraan/:plat', db.detailKendaraan);
+app.get('/pengelola', db.allPengelola)
 
 app.options('/kendaraan', cors());
 app.post('/kendaraan', cors(), db.createKendaraan);

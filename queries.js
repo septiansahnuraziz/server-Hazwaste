@@ -77,6 +77,17 @@ const allUnit = (request, response) => {
     })
 }
 
+const allPengelola = (request, response) => {
+    pool.query (
+        'SELECT * FROM PENGELOLA ORDER BY id', (error, results) => {
+            if(error) {
+                throw error
+            }
+            response.status(200).json(results.rows)
+        }
+    )
+}
+
 const createKendaraan = (request, response) => {
     const {plat, jenis, no_klh} = request.body
 
@@ -114,11 +125,11 @@ const createPengemudi = (request, response) => {
 }
 
 const createPenghasil = (request, response) => {
-    const {nama, lokasi} = request.body
+    const {nama, lokasi, latitude, longitude} = request.body
 
     pool.query (
-        'INSERT INTO penghasil(nama, alamat) VALUES ($1, $2)',
-        [nama, lokasi], (error, results) => {
+        'INSERT INTO penghasil(nama, alamat, latitude, longitude) VALUES ($1, $2, $3, $4)',
+        [nama, lokasi, latitude, longitude], (error, results) => {
             if (error) {
                 throw error
             }
@@ -282,6 +293,56 @@ const getAvailableVehicle = (request, response) => {
     })
 }
 
+const getPenghasilById = (request, response) => {
+    const id = request.params.id
+    pool.query (
+        'SELECT * FROM PENGHASIL WHERE id = $1', [id], (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).json(results.rows)
+        }
+    )
+}
+
+const getKemasanById = (request, response) => {
+    const id = request.params.id
+    pool.query (
+        'SELECT * FROM KEMASAN WHERE id = $1', [id], (error, results) =>{
+            if (error) {
+                throw error
+            }
+            response.status(200).json(results.rows)
+        }
+    )
+}
+
+const getUnitById = (request, response) => {
+    const id = request.params.id
+    pool.query(
+        'SELECT * FROM UNIT WHERE id = $1', [id], (error, results) => {
+            if(error) {
+                throw error
+            }
+            response.status(200).json(results.rows)
+        } 
+    )
+}
+
+const getLimbahByKode = (request, response) => {
+    const kode_limbah = request.params.kode_limbah
+    pool.query (
+        'SELECT * FROM JENIS_LIMBAH WHERE kode_limbah = $1', [kode_limbah], (error, results) => {
+            if(error) {
+                throw error
+            }
+            response.status(200).json(results.rows)
+        }
+    )
+}
+
+
+
 const updateStatusPerjalanan = (request, response) =>{
     const id = parseInt(request.params.id)
     const {status} = request.body
@@ -297,8 +358,8 @@ const updateStatusPerjalanan = (request, response) =>{
 }
 
 module.exports = { detailKendaraan, allPengemudi, allPenghasil, allKendaraan,
-    allKemasan, allJenisLimbah, allUnit, createIjin, createKendaraan, createPengemudi,
+    allKemasan, allJenisLimbah, allUnit, allPengelola,createIjin, createKendaraan, createPengemudi,
     createPenghasil, createTransport, createManifest, createTracking, getActiveTransport,
-    getActiveVehicle, getActiveVehiclebyPenghasil, getManifestbyPenghasil, getManifestbyTruck,
-    getAvailableDriver, getAvailableVehicle, updateStatusPerjalanan
+    getActiveVehicle, getActiveVehiclebyPenghasil, getManifestbyPenghasil, getPenghasilById, getManifestbyTruck,
+    getAvailableDriver, getAvailableVehicle, getLimbahByKode, getKemasanById, getUnitById, updateStatusPerjalanan
   }
