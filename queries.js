@@ -196,6 +196,23 @@ const createManifest= (request, response) => {
     )
 }
 
+const updateLastManifest = (request, response) => {
+    const {id_perjalanan, tanggal} = request.body
+    pool.query (
+        'UPDATE limbah SET id_perjalanan = $1, tanggal = $2 where manifest_no = (SELECT max(manifest_no) FROM limbah)',
+        [id_perjalanan, tanggal], (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(201).json({
+                status: 'success',
+                message: 'Berhasil mengupdate id_perjalanan dan tanggal pada Manifest terakhir',
+                data: request.body
+            })
+        }
+    )
+}
+
 const createTracking= (request, response) => {
     const {id_perjalanan, waktu, posisi_lintang, posisi_bujur} = request.body
 
@@ -341,6 +358,18 @@ const getLimbahByKode = (request, response) => {
     )
 }
 
+const getManifestByNomor = (request, response) => {
+    const manifest_no = request.params.manifest_no
+    pool.query (
+        'SELECT * FROM limbah order by manifest_no desc limit 1', (error, results) => {
+            if(error) {
+                throw error
+            }
+            response.status(200).json(results.rows)
+        }
+    )
+}
+
 
 
 const updateStatusPerjalanan = (request, response) =>{
@@ -361,5 +390,5 @@ module.exports = { detailKendaraan, allPengemudi, allPenghasil, allKendaraan,
     allKemasan, allJenisLimbah, allUnit, allPengelola,createIjin, createKendaraan, createPengemudi,
     createPenghasil, createTransport, createManifest, createTracking, getActiveTransport,
     getActiveVehicle, getActiveVehiclebyPenghasil, getManifestbyPenghasil, getPenghasilById, getManifestbyTruck,
-    getAvailableDriver, getAvailableVehicle, getLimbahByKode, getKemasanById, getUnitById, updateStatusPerjalanan
+    getAvailableDriver, getAvailableVehicle, getLimbahByKode, getKemasanById, getUnitById, getManifestByNomor,updateLastManifest, updateStatusPerjalanan
   }

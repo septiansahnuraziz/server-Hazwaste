@@ -41,9 +41,11 @@ app.get('/activeTransport/:plat', db.getActiveTransport);
 app.get('/activeVehicle/:penghasil', db.getActiveVehiclebyPenghasil);
 app.get('/activeVehicle', db.getActiveVehicle);
 app.get('/manifest/:id_penghasil&:plat', db.getManifestbyPenghasil);
+app.get('/getLastManifest', db.getManifestByNomor);
 app.get('/manifest/:plat', db.getManifestbyTruck);
 app.get('/kendaraan/:plat', db.detailKendaraan);
-app.get('/pengelola', db.allPengelola)
+app.get('/pengelola', db.allPengelola);
+
 
 app.options('/kendaraan', cors());
 app.post('/kendaraan', cors(), db.createKendaraan);
@@ -54,6 +56,9 @@ app.post('/perjalanan', db.createTransport);
 app.post('/manifest', db.createManifest);
 app.post('/posisi', db.createTracking);
 app.put('/transport/:id', db.updateStatusPerjalanan);
+
+app.put('/updateLastManifest', db.updateLastManifest);
+
 //app.delete('/users/:id', db.deleteUser)
 
 app.listen(3000, function () {
