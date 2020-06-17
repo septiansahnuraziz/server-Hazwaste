@@ -1,8 +1,10 @@
+const { response } = require('express')
+
 const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'hazwate',
+  database: 'hazwaste',
   password: 'admin',
   port: 5432,
 })
@@ -81,6 +83,17 @@ const allPengelola = (request, response) => {
     pool.query (
         'SELECT * FROM PENGELOLA ORDER BY id', (error, results) => {
             if(error) {
+                throw error
+            }
+            response.status(200).json(results.rows)
+        }
+    )
+}
+
+const allManifest = (request, response) => {
+    pool.query(
+        'SELECT * FROM LIMBAH ORDER BY manifest_no', (error, results) => {
+            if (error) {
                 throw error
             }
             response.status(200).json(results.rows)
@@ -187,7 +200,7 @@ const createManifest= (request, response) => {
             if (error) {
                 throw error
             }
-            response.status(201).json({
+            response.status(200).json({
                 status: 'success',
                 message: 'Berhasil menambahkan Manifest',
                 data: request.body
@@ -266,9 +279,9 @@ const getActiveVehiclebyPenghasil = (request, response) => {
 const getManifestbyPenghasil = (request, response) => {
     const id_penghasil = request.params.id_penghasil
     const plat= request.params.plat
-    
+
     pool.query (
-        'SELECT limbah.* FROM limbah,perjalanan WHERE id_penghasil = $1 AND id_perjalanan = perjalanan.id AND status = 1 and plat=$2',[id_penghasil, plat],(error, results)=> {
+        'SELECT limbah * FROM limbah,perjalanan WHERE id_penghasil = $1 AND id_perjalanan = perjalanan.id AND status = 1 and plat=$2',[id_penghasil, plat],(error, results)=> {
             if (error) {
                 throw error
             }
@@ -278,7 +291,7 @@ const getManifestbyPenghasil = (request, response) => {
 
 const getManifestbyTruck = (request, response) => {
     const plat= request.params.plat
-    
+
     pool.query (
         'SELECT limbah.* FROM limbah,perjalanan WHERE id_perjalanan = perjalanan.id AND status = 1 and plat=$1',[plat],(error, results)=> {
             if (error) {
@@ -289,7 +302,7 @@ const getManifestbyTruck = (request, response) => {
 }
 
 const getAvailableDriver = (request, response) => {
-    
+
     pool.query (
         'SELECT * FROM pengemudi WHERE sim not in (select sim from perjalanan where status = 1)',(error, results)=> {
             if (error) {
@@ -300,7 +313,7 @@ const getAvailableDriver = (request, response) => {
 }
 
 const getAvailableVehicle = (request, response) => {
-    
+
     pool.query (
         'SELECT * FROM kendaraan WHERE plat not in (select plat from perjalanan where status = 1)',(error, results)=> {
             if (error) {
@@ -314,6 +327,18 @@ const getPenghasilById = (request, response) => {
     const id = request.params.id
     pool.query (
         'SELECT * FROM PENGHASIL WHERE id = $1', [id], (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).json(results.rows)
+        }
+    )
+}
+
+const getPengelolaById = (request, response) => {
+    const id = request.params.id
+    pool.query(
+        'SELECT * FROM PENGELOLA WHERE id = $1', [id], (error, results) => {
             if (error) {
                 throw error
             }
@@ -342,7 +367,7 @@ const getUnitById = (request, response) => {
                 throw error
             }
             response.status(200).json(results.rows)
-        } 
+        }
     )
 }
 
@@ -387,8 +412,8 @@ const updateStatusPerjalanan = (request, response) =>{
 }
 
 module.exports = { detailKendaraan, allPengemudi, allPenghasil, allKendaraan,
-    allKemasan, allJenisLimbah, allUnit, allPengelola,createIjin, createKendaraan, createPengemudi,
+    allKemasan, allJenisLimbah, allUnit, allPengelola, allManifest, createIjin, createKendaraan, createPengemudi,
     createPenghasil, createTransport, createManifest, createTracking, getActiveTransport,
-    getActiveVehicle, getActiveVehiclebyPenghasil, getManifestbyPenghasil, getPenghasilById, getManifestbyTruck,
+    getActiveVehicle, getActiveVehiclebyPenghasil, getManifestbyPenghasil, getPenghasilById, getPengelolaById, getManifestbyTruck,
     getAvailableDriver, getAvailableVehicle, getLimbahByKode, getKemasanById, getUnitById, getManifestByNomor,updateLastManifest, updateStatusPerjalanan
   }

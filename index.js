@@ -43,9 +43,10 @@ app.get('/activeVehicle', db.getActiveVehicle);
 app.get('/manifest/:id_penghasil&:plat', db.getManifestbyPenghasil);
 app.get('/getLastManifest', db.getManifestByNomor);
 app.get('/manifest/:plat', db.getManifestbyTruck);
+app.get('/manifest', db.allManifest);
 app.get('/kendaraan/:plat', db.detailKendaraan);
 app.get('/pengelola', db.allPengelola);
-
+app.get('/pengelola/:id', db.getPengelolaById);
 
 app.options('/kendaraan', cors());
 app.post('/kendaraan', cors(), db.createKendaraan);
